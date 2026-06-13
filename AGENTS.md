@@ -61,7 +61,7 @@ src/
 3. **DELETE MORE THAN YOU ADD**: Prioritize deleting code over creating new lines. Code complexity compounds into disasters. Keep changes minimal and clean.
 4. **FOLLOW EXISTING PATTERNS**: Do not invent new structures or architectural approaches. Follow the project's existing code style and structure.
 5. **BUILD AND TEST**: Every change must be validated. Run `pnpm build`, `pnpm test`, and `pnpm check` to ensure no compile, test, or linting errors exist.
-6. **COMMIT FREQUENTLY**: Commit your work to Git every 5-10 minutes representing a logical, verifiable step. Please use `/` skill
+6. **COMMIT FREQUENTLY**: Commit your work to Git every 5-10 minutes representing a logical, verifiable step. Please use `/conventional-commit` skill
 
 ## Task Management
 - **📋 20-POINT TODO LIST**: Always maintain a detailed, progressive todo list of at least 20 items to track your progress and prevent losing context. Keep it updated.
