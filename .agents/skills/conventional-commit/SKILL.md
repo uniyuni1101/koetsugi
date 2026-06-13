@@ -22,13 +22,11 @@ Commit messages must be written in Japanese. Writing them in English is not perm
 2. Run `git diff` or `git diff --cached` to inspect changes.
 3. Stage your changes with `git add <file>`.
 4. Construct your commit message using the following XML structure.
-5. After generating your commit message, CodeingAgent will run the following command in your integrated terminal (no confirmation needed):
+5. After generating your commit message, CodeingAgent will run the command  (no confirmation needed):
 
 ```bash
 git commit -m "type(scope): description"
 ```
-
-6. Just execute this prompt and CodeingAgent will handle the commit for you in the terminal.
 
 ### Commit Message Structure
 
