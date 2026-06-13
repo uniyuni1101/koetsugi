@@ -8,7 +8,17 @@
 		"ghcr.io/devcontainers/features/common-utils:2": {},
 		"ghcr.io/roul/devcontainer-features/mise:1": {}
 	},
-	"postCreateCommand": "mise trust"
+	"postCreateCommand": "mise trust",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"biomejs.biome",
+				"bierner.markdown-mermaid",
+				"vitest.explorer",
+				"bradlc.vscode-tailwindcss"
+			]
+		}
+	}
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.

@@ -1,0 +1,33 @@
+engine biome(1.0)
+
+language js
+
+or {
+  `import $identifiers from $source` where {
+    $filename <: r".*src/(?:components|hooks|utils|lib|stores|types|config|testing)/.*",
+    $source <: r"^['\"](?:@|#|\.)(?:.*\/)?(?:features|routes|router)(?:/.*)?['\"]",
+    register_diagnostic(
+      span = $source,
+      message = "Shared modules must not import from features or routes (app) layers."
+    )
+  },
+
+  `import $identifiers from $source` where {
+    $filename <: r".*src/features/.*",
+    $source <: r"^['\"](?:@|#|\.)(?:.*\/)?(?:routes|router)(?:/.*)?['\"]",
+    register_diagnostic(
+      span = $source,
+      message = "Features must not import from the routes (app) layer. Compose at the app level."
+    )
+  },
+
+  `import $identifiers from $source` where {
+    $filename <: r".*src/features/([a-z0-9-]+)/.*"($feature1),
+    $source <: r"^['\"](?:@|#|\.)(?:.*\/)?features/([a-z0-9-]+)(?:/.*)?['\"]"($feature2),
+    $feature1 <: not $feature2,
+    register_diagnostic(
+      span = $source,
+      message = "Features must not import from other features. Compose at the app/route level."
+    )
+  }
+}
