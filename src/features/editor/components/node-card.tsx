@@ -64,7 +64,7 @@ export function NodeCard({ node, isInitial, onEdit }: NodeCardProps) {
 
 					{node.transitions.length > 0 && (
 						<div className="flex flex-col gap-1 max-h-24 overflow-y-auto border-l border-muted pl-2 text-xs font-mono text-muted-foreground">
-							{node.transitions.map((t, idx) => {
+							{node.transitions.map((t) => {
 								const targetText =
 									t.type === "choice"
 										? `"${t.buttonText}" → ${t.targetId}`
@@ -72,9 +72,16 @@ export function NodeCard({ node, isInitial, onEdit }: NodeCardProps) {
 											? `Weight: ${t.weight} → ${t.targetId}`
 											: `→ ${t.targetId}`;
 
+								const key =
+									t.type === "choice"
+										? `choice-${t.targetId}-${t.buttonText}`
+										: t.type === "random"
+											? `random-${t.targetId}-${t.weight}`
+											: `direct-${t.targetId}`;
+
 								return (
 									<div
-										key={`${t.targetId}-${idx}`}
+										key={key}
 										className="flex items-center gap-1 py-0.5 truncate"
 									>
 										<ArrowRight className="size-3 text-muted-foreground/50 shrink-0" />
