@@ -59,7 +59,6 @@ export function HistoryDrawer() {
 
 						return (
 							<div
-								// biome-ignore lint/suspicious/noArrayIndexKey: history timeline order is fixed
 								key={`${nodeId}-${idx}`}
 								className="relative flex items-start pb-6 last:pb-2"
 							>

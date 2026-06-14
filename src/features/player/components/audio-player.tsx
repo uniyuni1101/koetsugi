@@ -13,7 +13,6 @@ export function AudioPlayer() {
 	const [objectUrl, setObjectUrl] = React.useState<string | null>(null);
 
 	// Load audio file when currentAudioPath changes
-	// biome-ignore lint/correctness/useExhaustiveDependencies: engineState is stable and objectUrl is handled in closure
 	React.useEffect(() => {
 		if (!engineState || !engineState.currentAudioPath) {
 			setObjectUrl(null);
@@ -74,15 +73,12 @@ export function AudioPlayer() {
 	if (!objectUrl) return null;
 
 	return (
-		<>
-			{/* biome-ignore lint/a11y/useMediaCaption: custom hidden player */}
-			<audio
-				ref={audioRef}
-				src={objectUrl}
-				onTimeUpdate={handleTimeUpdate}
-				onEnded={handleEnded}
-				className="hidden"
-			/>
-		</>
+		<audio
+			ref={audioRef}
+			src={objectUrl}
+			onTimeUpdate={handleTimeUpdate}
+			onEnded={handleEnded}
+			className="hidden"
+		/>
 	);
 }

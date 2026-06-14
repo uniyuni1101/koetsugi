@@ -74,7 +74,6 @@ export function NodeCard({ node, isInitial, onEdit }: NodeCardProps) {
 
 								return (
 									<div
-										// biome-ignore lint/suspicious/noArrayIndexKey: indices are stable for static display
 										key={`${t.targetId}-${idx}`}
 										className="flex items-center gap-1 py-0.5 truncate"
 									>

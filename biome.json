@@ -49,6 +49,22 @@
 			"a11y": {
 				"useAltText": "error",
 				"useValidAnchor": "error"
+			},
+			"complexity": {
+				"noExcessiveCognitiveComplexity": {
+					"level": "warn",
+					"options": {
+						"maxAllowedComplexity": 15
+					}
+				}
+			},
+			"nursery": {
+				"noExcessiveLinesPerFile": {
+					"level": "error",
+					"options": {
+						"maxLines": 300
+					}
+				}
 			}
 		}
 	},

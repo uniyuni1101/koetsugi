@@ -53,7 +53,6 @@ export function NodeEditorForm({
 	);
 
 	// Handle type changes
-	// biome-ignore lint/correctness/useExhaustiveDependencies: run only on transitionType change
 	React.useEffect(() => {
 		if (transitionType === "none") {
 			setTransitions([]);
@@ -231,7 +230,6 @@ export function NodeEditorForm({
 					<div className="flex flex-col gap-3 max-h-60 overflow-y-auto pr-1">
 						{transitions.map((t, index) => (
 							<TransitionItemEditor
-								// biome-ignore lint/suspicious/noArrayIndexKey: order can change but keys are stable within item editing
 								key={index}
 								transition={t}
 								index={index}
