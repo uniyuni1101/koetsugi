@@ -35,7 +35,8 @@ Organize by feature, not by file type:
 
 ```text
 src/
-├── app/                # Application shell (routes, providers, router)
+├── routes/             # Routing configuration (TanStack Start/Router routes)
+├── providers/          # Global providers (QueryClient, Theme, etc.)
 ├── assets/             # Static files (images, fonts)
 ├── components/         # Shared, reusable UI components
 ├── config/             # Environment variables, constants

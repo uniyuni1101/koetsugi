@@ -7,6 +7,7 @@
 - **Purpose**: Web application built with React, Vite, and TanStack Start.
 - **Tech Stack**:
   - Vite, React 19, TypeScript
+  - Shadcn/ui (UI Components)
   - Tailwind CSS 4 (Styling)
   - TanStack Router & TanStack Start
   - Biome (Linting & Formatting)
@@ -17,23 +18,29 @@
 
 ## Architecture (Bulletproof React + Decoupled Workflow)
 
+> [!IMPORTANT]
+> 本プロジェクトは `bulletproof-react` の設計思想をベースとしていますが、TanStack Router/Start の標準的なファイルベースルーティングに準拠するため、`src/app` ディレクトリは使用しません。
+> `routes` や `providers` は `src/` 直下にフラットに配置します。
+
 ### Directory Structure
 ```text
 src/
-├── app/                  # App shell, routes, providers, global layout
-│   ├── providers/        # Global providers (QueryClient, Theme, etc.)
-│   └── routes/           # Routing configuration (TanStack Start/Router routes)
+├── routes/               # Routing configuration (TanStack Start/Router routes)
+├── providers/            # Global providers (QueryClient, Theme, etc.)
+├── assets/               # Static files (images, fonts)
 ├── components/           # Reusable, styling-only shared UI components
-│   └── ui/               # Shared primitive components (e.g., button, modal)
+│   └── ui/               # Shared primitive `shadcn/ui` components (e.g., button, modal)
+├── config/               # Environment variables, constants
 ├── features/             # Feature-based modules (detailed below)
-├── workflows/            # Core workflows & XState machine definitions (pure domain logic)
-│   │                     # Acts as a dynamic audio playlist engine driven by workflow JSON files
-│   └── [workflow-name]/  # Workflow isolation folder
-│       ├── machine.ts    # XState machine
-│       ├── types.ts      # Machine context / events / states types
-│       └── index.ts      # Workflow entry point
-└── stores/               # Zustand stores (manages pure global UI state like modals, theme)
-    └── ui-store.ts       # Global UI state store
+├── hooks/                # Shared custom hooks
+├── lib/                  # Pre-configured library wrappers
+├── stores/               # Zustand stores (manages pure global UI state like modals, theme)
+│   └── ui-store.ts       # Global UI state store
+├── testing/              # Test utilities, MSW handlers, factories
+├── types/                # Shared TypeScript types
+├── utils/                # Pure utility functions
+└── workflows/            # Core workflows & XState machine definitions (pure domain logic)
+                          # Acts as a dynamic audio playlist engine driven by workflow JSON files
 ```
 
 ### Feature Modules (`src/features/[feature-name]/`)
