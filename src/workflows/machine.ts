@@ -14,7 +14,8 @@ export type WorkflowEvent =
 	| { type: "AUDIO_ENDED" }
 	| { type: "SELECT_CHOICE"; targetId: string }
 	| { type: "JUMP_TO_NODE"; targetId: string }
-	| { type: "BACK" };
+	| { type: "BACK" }
+	| { type: "ROLLBACK"; targetIndex: number };
 
 function pickRandomTarget(transitions: RandomTransition[]): string {
 	const totalWeight = transitions.reduce((sum, t) => sum + t.weight, 0);
@@ -59,6 +60,20 @@ export const createWorkflowMachine = (workflow: Workflow) => {
 					const prevNodeId = newHistory[newHistory.length - 1];
 					return {
 						currentNodeId: prevNodeId,
+						history: newHistory,
+					};
+				}),
+			},
+			ROLLBACK: {
+				guard: ({ context, event }) =>
+					event.targetIndex >= 0 &&
+					event.targetIndex < context.history.length - 1,
+				target: ".playing",
+				actions: assign(({ context, event }) => {
+					const newHistory = context.history.slice(0, event.targetIndex + 1);
+					const targetNodeId = newHistory[newHistory.length - 1];
+					return {
+						currentNodeId: targetNodeId,
 						history: newHistory,
 					};
 				}),

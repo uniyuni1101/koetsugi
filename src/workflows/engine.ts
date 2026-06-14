@@ -84,6 +84,15 @@ export class WorkflowEngine {
 		this.actor.send({ type: "BACK" });
 	}
 
+	rollback(targetIndex: number): void {
+		this.actor.start();
+		const snapshot = this.actor.getSnapshot();
+		if (targetIndex < 0 || targetIndex >= snapshot.context.history.length - 1) {
+			throw new Error(`Invalid target index to rollback: ${targetIndex}`);
+		}
+		this.actor.send({ type: "ROLLBACK", targetIndex });
+	}
+
 	get state(): EngineState {
 		const snapshot = this.actor.getSnapshot();
 		const currentNodeId = snapshot.context.currentNodeId;

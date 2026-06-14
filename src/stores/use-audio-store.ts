@@ -39,6 +39,7 @@ interface AudioStoreState {
 	selectChoice: (targetId: string) => void;
 	jumpToNode: (targetId: string) => void;
 	back: () => void;
+	rollback: (targetIndex: number) => void;
 	setAudioProgress: (currentTime: number, duration: number) => void;
 	requestSeek: (time: number | null) => void;
 	resetEngine: () => void;
@@ -240,6 +241,14 @@ export const useAudioStore = create<AudioStoreState>((set, get) => {
 			const { engine } = get();
 			if (engine) {
 				engine.back();
+				set({ engineState: engine.state });
+			}
+		},
+
+		rollback: (targetIndex) => {
+			const { engine } = get();
+			if (engine) {
+				engine.rollback(targetIndex);
 				set({ engineState: engine.state });
 			}
 		},

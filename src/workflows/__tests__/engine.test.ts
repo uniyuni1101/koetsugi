@@ -172,4 +172,36 @@ describe("WorkflowEngine", () => {
 		// Going back when history length is 1 should throw an error
 		expect(() => engine.back()).toThrow("Cannot go back");
 	});
+
+	it("should allow rolling back to a specific index in history", () => {
+		const engine = new WorkflowEngine(testWorkflow);
+
+		// Start the engine
+		engine.start(); // node-start
+		engine.jumpToNode("node-branch");
+		engine.jumpToNode("node-choice-1");
+		engine.jumpToNode("node-end");
+
+		expect(engine.state.history).toEqual([
+			"node-start",
+			"node-branch",
+			"node-choice-1",
+			"node-end",
+		]);
+		expect(engine.state.currentNodeId).toBe("node-end");
+
+		// Rollback to index 1 ("node-branch")
+		engine.rollback(1);
+		expect(engine.state.currentNodeId).toBe("node-branch");
+		expect(engine.state.history).toEqual(["node-start", "node-branch"]);
+
+		// Rollback to index 0 ("node-start")
+		engine.rollback(0);
+		expect(engine.state.currentNodeId).toBe("node-start");
+		expect(engine.state.history).toEqual(["node-start"]);
+
+		// Throw error if rollback index is out of bounds
+		expect(() => engine.rollback(-1)).toThrow("Invalid target index");
+		expect(() => engine.rollback(0)).toThrow("Invalid target index"); // since length is 1, index 0 is equal to length - 1
+	});
 });
