@@ -73,5 +73,8 @@
 			"quoteStyle": "double"
 		}
 	},
-	"plugins": ["./.biome/bulletproof-rules.grit"]
+	"plugins": [
+		"./.biome/bulletproof-rules.grit",
+		"./.biome/no-biome-ignore.grit"
+	]
 }

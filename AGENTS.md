@@ -71,6 +71,12 @@ src/
 6. **BUILD AND TEST**: Every change must be validated. Run `pnpm build`, `pnpm test`, and `pnpm check` to ensure no compile, test, or linting errors exist.
 7. **COMMIT FREQUENTLY**: Commit your work to Git every 5-10 minutes representing a logical, verifiable step. Please use `/conventional-commit` skill
 
+## Linting Error Resolution Rules
+1. **Never suppress errors with `// biome-ignore`**: Do not use `// biome-ignore` comments to suppress linting errors.
+2. **`// biome-ignore` is auto-removed**: A custom linter plugin is configured to automatically strip and remove any `// biome-ignore` comments.
+3. **No logic changes allowed**: Do not modify any program logic when fixing linting errors.
+4. **Change approach if a fix fails**: If an approach to fix a linting error fails, change your strategy instead of repeating the same failing fix.
+
 ## Task Management
 - **📋 20-POINT TODO LIST**: Always maintain a detailed, progressive todo list of at least 20 items to track your progress and prevent losing context. Keep it updated.
 - Use your internal agent tools to manage, prioritize, and check off tasks continuously.

@@ -1,0 +1,10 @@
+engine biome(1.0)
+
+language js
+
+// コメントノードの中から "biome-ignore" を含むものを探し、削除（=> .）する
+pattern remove_ai_laziness() {
+  r"//\\s*biome-ignore[^\n]*" => .
+}
+
+remove_ai_laziness()
