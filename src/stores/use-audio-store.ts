@@ -37,6 +37,8 @@ interface AudioStoreState {
 	pauseEngine: () => void;
 	audioEnded: () => void;
 	selectChoice: (targetId: string) => void;
+	jumpToNode: (targetId: string) => void;
+	back: () => void;
 	setAudioProgress: (currentTime: number, duration: number) => void;
 	requestSeek: (time: number | null) => void;
 	resetEngine: () => void;
@@ -222,6 +224,22 @@ export const useAudioStore = create<AudioStoreState>((set, get) => {
 			const { engine } = get();
 			if (engine) {
 				engine.selectChoice(targetId);
+				set({ engineState: engine.state });
+			}
+		},
+
+		jumpToNode: (targetId) => {
+			const { engine } = get();
+			if (engine) {
+				engine.jumpToNode(targetId);
+				set({ engineState: engine.state });
+			}
+		},
+
+		back: () => {
+			const { engine } = get();
+			if (engine) {
+				engine.back();
 				set({ engineState: engine.state });
 			}
 		},

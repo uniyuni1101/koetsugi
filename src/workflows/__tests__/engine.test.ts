@@ -134,4 +134,42 @@ describe("WorkflowEngine", () => {
 		// Currently playing node-start, which is direct, not choice.
 		expect(() => engine.selectChoice("node-branch")).toThrow();
 	});
+
+	it("should allow jumping to an arbitrary node mid-playback and popping history on back", () => {
+		const engine = new WorkflowEngine(testWorkflow);
+
+		// Start the engine
+		engine.start();
+		expect(engine.state.currentNodeId).toBe("node-start");
+		expect(engine.state.history).toEqual(["node-start"]);
+
+		// Jump to node-choice-2 mid-playback
+		engine.jumpToNode("node-choice-2");
+		expect(engine.state.status).toBe("playing");
+		expect(engine.state.currentNodeId).toBe("node-choice-2");
+		expect(engine.state.history).toEqual(["node-start", "node-choice-2"]);
+
+		// Jump to node-end
+		engine.jumpToNode("node-end");
+		expect(engine.state.currentNodeId).toBe("node-end");
+		expect(engine.state.history).toEqual([
+			"node-start",
+			"node-choice-2",
+			"node-end",
+		]);
+
+		// Go back (pop node-end)
+		engine.back();
+		expect(engine.state.status).toBe("playing");
+		expect(engine.state.currentNodeId).toBe("node-choice-2");
+		expect(engine.state.history).toEqual(["node-start", "node-choice-2"]);
+
+		// Go back again (pop node-choice-2)
+		engine.back();
+		expect(engine.state.currentNodeId).toBe("node-start");
+		expect(engine.state.history).toEqual(["node-start"]);
+
+		// Going back when history length is 1 should throw an error
+		expect(() => engine.back()).toThrow("Cannot go back");
+	});
 });

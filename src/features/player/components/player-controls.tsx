@@ -17,7 +17,7 @@ export function PlayerControls() {
 	const audioDuration = useAudioStore((state) => state.audioDuration);
 	const playEngine = useAudioStore((state) => state.playEngine);
 	const pauseEngine = useAudioStore((state) => state.pauseEngine);
-	const startEngine = useAudioStore((state) => state.startEngine);
+	const back = useAudioStore((state) => state.back);
 	const audioEnded = useAudioStore((state) => state.audioEnded);
 	const requestSeek = useAudioStore((state) => state.requestSeek);
 	const resetEngine = useAudioStore((state) => state.resetEngine);
@@ -46,8 +46,7 @@ export function PlayerControls() {
 	const canGoPrev = engineState.history.length > 1;
 	const handlePrevNode = () => {
 		if (!canGoPrev) return;
-		const prevNodeId = engineState.history[engineState.history.length - 2];
-		startEngine(prevNodeId);
+		back();
 	};
 
 	const currentNode =

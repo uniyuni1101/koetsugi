@@ -66,6 +66,24 @@ export class WorkflowEngine {
 		this.actor.send({ type: "SELECT_CHOICE", targetId });
 	}
 
+	jumpToNode(targetId: string): void {
+		this.actor.start();
+		const snapshot = this.actor.getSnapshot();
+		if (!snapshot.context.workflow.nodes[targetId]) {
+			throw new Error(`Invalid target node ID: "${targetId}"`);
+		}
+		this.actor.send({ type: "JUMP_TO_NODE", targetId });
+	}
+
+	back(): void {
+		this.actor.start();
+		const snapshot = this.actor.getSnapshot();
+		if (snapshot.context.history.length <= 1) {
+			throw new Error("Cannot go back: no previous node in history.");
+		}
+		this.actor.send({ type: "BACK" });
+	}
+
 	get state(): EngineState {
 		const snapshot = this.actor.getSnapshot();
 		const currentNodeId = snapshot.context.currentNodeId;

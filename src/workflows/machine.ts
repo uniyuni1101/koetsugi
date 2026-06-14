@@ -12,7 +12,9 @@ export type WorkflowEvent =
 	| { type: "PLAY" }
 	| { type: "PAUSE" }
 	| { type: "AUDIO_ENDED" }
-	| { type: "SELECT_CHOICE"; targetId: string };
+	| { type: "SELECT_CHOICE"; targetId: string }
+	| { type: "JUMP_TO_NODE"; targetId: string }
+	| { type: "BACK" };
 
 function pickRandomTarget(transitions: RandomTransition[]): string {
 	const totalWeight = transitions.reduce((sum, t) => sum + t.weight, 0);
@@ -38,6 +40,29 @@ export const createWorkflowMachine = (workflow: Workflow) => {
 			workflow,
 			currentNodeId: null,
 			history: [],
+		},
+		on: {
+			JUMP_TO_NODE: {
+				target: ".playing",
+				actions: assign(({ context, event }) => {
+					return {
+						currentNodeId: event.targetId,
+						history: [...context.history, event.targetId],
+					};
+				}),
+			},
+			BACK: {
+				guard: ({ context }) => context.history.length > 1,
+				target: ".playing",
+				actions: assign(({ context }) => {
+					const newHistory = context.history.slice(0, -1);
+					const prevNodeId = newHistory[newHistory.length - 1];
+					return {
+						currentNodeId: prevNodeId,
+						history: newHistory,
+					};
+				}),
+			},
 		},
 		states: {
 			idle: {
@@ -137,9 +162,7 @@ export const createWorkflowMachine = (workflow: Workflow) => {
 					},
 				},
 			},
-			completed: {
-				type: "final",
-			},
+			completed: {},
 		},
 	});
 };
