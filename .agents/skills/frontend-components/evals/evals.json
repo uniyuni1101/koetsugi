@@ -1,0 +1,49 @@
+{
+  "skill_name": "frontend-components",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Create a feature component named AudioTrackCard under the audio-player feature. This component should display a track's title, artist, duration, and status (e.g., loading, playing, paused, error). It should follow bulletproof-react structure, separating the UI component from local/hook state if needed. Ensure it has its Storybook story with states for playing, paused, and loading, located right next to the component.",
+      "expected_output": "The component AudioTrackCard.tsx and its Storybook story AudioTrackCard.stories.tsx are created successfully under src/features/audio-player/components/ following the co-location and bulletproof-react principles.",
+      "assertions": [
+        {
+          "name": "correct_directory",
+          "description": "Component is placed under src/features/audio-player/components/"
+        },
+        {
+          "name": "colocated_story",
+          "description": "Storybook file is co-located right next to the component"
+        },
+        {
+          "name": "decoupled_logic",
+          "description": "Component has minimal logic (business logic, states decoupled or clean props interface)"
+        },
+        {
+          "name": "multiple_states_story",
+          "description": "Story defines multiple states (e.g. playing, paused, loading)"
+        }
+      ],
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "Create a shared UI component named VolumeSlider under src/components/ui/ with a corresponding Storybook story next to it. It should be strictly stateless, taking standard props like value, onChange, and disabled. Implement a nice visual layout using Tailwind CSS.",
+      "expected_output": "The component VolumeSlider.tsx and its Storybook story VolumeSlider.stories.tsx are created successfully under src/components/ui/ as stateless/style-only files.",
+      "assertions": [
+        {
+          "name": "correct_ui_directory",
+          "description": "Component is placed under src/components/ui/"
+        },
+        {
+          "name": "colocated_story_ui",
+          "description": "Storybook file is co-located right next to the component"
+        },
+        {
+          "name": "stateless_ui",
+          "description": "Component is strictly stateless and style-only (no state/hooks imports)"
+        }
+      ],
+      "files": []
+    }
+  ]
+}
