@@ -102,7 +102,7 @@ export function PlayerView() {
 					</div>
 
 					{/* Center Interaction: Split Choice screen or standard Playing view */}
-					{engineState.status === "waitingForChoice" ? (
+					{engineState.choices.length > 0 ? (
 						<ChoiceButtons />
 					) : (
 						<div className="flex-1 flex flex-col justify-center items-center gap-4 border-2 border-dashed border-muted rounded-2xl p-6 bg-muted/10 my-4 min-h-0">

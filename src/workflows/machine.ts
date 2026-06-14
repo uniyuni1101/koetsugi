@@ -58,6 +58,15 @@ export const createWorkflowMachine = (workflow: Workflow) => {
 			playing: {
 				on: {
 					PAUSE: "paused",
+					SELECT_CHOICE: {
+						target: "playing",
+						actions: assign(({ context, event }) => {
+							return {
+								currentNodeId: event.targetId,
+								history: [...context.history, event.targetId],
+							};
+						}),
+					},
 					AUDIO_ENDED: [
 						{
 							guard: ({ context }) => {

@@ -11,6 +11,7 @@ interface AudioStoreState {
 	engineState: EngineState | null;
 	audioCurrentTime: number;
 	audioDuration: number;
+	seekRequestTime: number | null;
 	activeTab: "player" | "editor" | "settings";
 
 	// Actions
@@ -37,6 +38,7 @@ interface AudioStoreState {
 	audioEnded: () => void;
 	selectChoice: (targetId: string) => void;
 	setAudioProgress: (currentTime: number, duration: number) => void;
+	requestSeek: (time: number | null) => void;
 	resetEngine: () => void;
 }
 
@@ -62,6 +64,7 @@ export const useAudioStore = create<AudioStoreState>((set, get) => {
 		engineState: null,
 		audioCurrentTime: 0,
 		audioDuration: 0,
+		seekRequestTime: null,
 		activeTab: "settings",
 
 		setActiveTab: (tab) => set({ activeTab: tab }),
@@ -76,6 +79,7 @@ export const useAudioStore = create<AudioStoreState>((set, get) => {
 				engineState: null,
 				audioCurrentTime: 0,
 				audioDuration: 0,
+				seekRequestTime: null,
 			});
 		},
 
@@ -105,6 +109,7 @@ export const useAudioStore = create<AudioStoreState>((set, get) => {
 				engineState: engine.state,
 				audioCurrentTime: 0,
 				audioDuration: 0,
+				seekRequestTime: null,
 			});
 
 			return { success: true };
@@ -228,6 +233,10 @@ export const useAudioStore = create<AudioStoreState>((set, get) => {
 			});
 		},
 
+		requestSeek: (time) => {
+			set({ seekRequestTime: time });
+		},
+
 		resetEngine: () => {
 			cleanupEngine();
 			const { workflow } = get();
@@ -242,6 +251,7 @@ export const useAudioStore = create<AudioStoreState>((set, get) => {
 					engineState: engine.state,
 					audioCurrentTime: 0,
 					audioDuration: 0,
+					seekRequestTime: null,
 				});
 			}
 		},

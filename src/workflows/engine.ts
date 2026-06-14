@@ -47,7 +47,10 @@ export class WorkflowEngine {
 
 	selectChoice(targetId: string): void {
 		const currentState = this.state;
-		if (currentState.status !== "waitingForChoice") {
+		if (
+			currentState.status !== "waitingForChoice" &&
+			currentState.status !== "playing"
+		) {
 			throw new Error(
 				`Cannot select choice when engine is in status "${currentState.status}"`,
 			);
@@ -77,7 +80,7 @@ export class WorkflowEngine {
 		else if (snapshot.matches("completed")) status = "completed";
 
 		const choices =
-			status === "waitingForChoice" && currentNode
+			(status === "waitingForChoice" || status === "playing") && currentNode
 				? (currentNode.transitions.filter(
 						(t) => t.type === "choice",
 					) as ChoiceTransition[])

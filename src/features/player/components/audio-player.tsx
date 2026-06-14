@@ -6,6 +6,8 @@ export function AudioPlayer() {
 	const engineState = useAudioStore((state) => state.engineState);
 	const audioEnded = useAudioStore((state) => state.audioEnded);
 	const setAudioProgress = useAudioStore((state) => state.setAudioProgress);
+	const seekRequestTime = useAudioStore((state) => state.seekRequestTime);
+	const requestSeek = useAudioStore((state) => state.requestSeek);
 
 	const audioRef = React.useRef<HTMLAudioElement | null>(null);
 	const [objectUrl, setObjectUrl] = React.useState<string | null>(null);
@@ -48,6 +50,15 @@ export function AudioPlayer() {
 			audio.pause();
 		}
 	}, [engineState, objectUrl]);
+
+	// Seek timeline handler
+	React.useEffect(() => {
+		const audio = audioRef.current;
+		if (audio && seekRequestTime !== null) {
+			audio.currentTime = seekRequestTime;
+			requestSeek(null);
+		}
+	}, [seekRequestTime, requestSeek]);
 
 	const handleTimeUpdate = () => {
 		const audio = audioRef.current;
