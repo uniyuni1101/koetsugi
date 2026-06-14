@@ -78,3 +78,37 @@ To ensure components are verifiable and testable, every non-trivial component mu
 
 - **Unit/Integration Tests**: Write Vitest/Testing Library tests (`*.test.tsx`) alongside components.
 - **Story Verification**: Utilize Storybook stories inside tests when possible to prevent duplicating mock setups, or write targeted user interaction tests focusing on behavioral assertions.
+
+---
+
+## Component Creation Workflow (Step-by-Step Checklist)
+
+When creating a new component, copy this checklist into your task/TODO list and complete the steps sequentially:
+
+### [ ] Step 1: Design & Placement
+- [ ] Please use skill `/frontend-design`
+- [ ] Ensure the component has a single, well-defined responsibility (`Single Responsibility Principle - Robert C. Martin`).
+- [ ] Determine if the component is a shared primitive (`src/components/ui/`) or a feature-specific element (`src/features/[feature-name]/components/`) based on component-driven principles (`Component-Driven Development - Tom Coleman`).
+- [ ] Group the component file, story file, test file, and specific types together in the same directory (`Colocation - Kent C. Dodds`).
+
+### [ ] Step 2: Interface Design (Props / API Design)
+- [ ] Define the TypeScript types/interfaces for the component's props first before writing the implementation (`API-First Design - Kas Thomas`).
+- [ ] Keep the component interface minimal and focused only on the data and callbacks it strictly needs (`Interface Segregation Principle - Robert C. Martin`).
+
+### [ ] Step 3: Implementation
+- [ ] Separate business logic, state management, and API queries (Zustand, XState, TanStack Query) from the presentation layer (`Separation of Concerns - Edsger W. Dijkstra`).
+- [ ] Write simple, straightforward code and avoid over-engineering or premature abstraction (`KISS Principle - Kelly Johnson`).
+- [ ] Follow styling rules using Tailwind CSS 4 and shadcn/ui primitive patterns rather than ad-hoc custom styles (`Design System Integration - Brad Frost`).
+
+### [ ] Step 4: Storybook Verification (Visual Verification)
+- [ ] Create a `*.stories.tsx` file directly next to the component file (`Colocation - Kent C. Dodds`).
+- [ ] Define CSF3 stories representing all visual states: Default/Primary, Loading/Submitting, Disabled, Error, and Empty/NoData (`Component-Driven Development - Tom Coleman`).
+
+### [ ] Step 5: Behavior Testing
+- [ ] Create a `*.test.tsx` file directly next to the component file (`Colocation - Kent C. Dodds`).
+- [ ] Write Vitest/Testing Library assertions focused on user interactions (e.g., clicks, inputs) rather than internal implementation details (`Behavior-Driven Development - Dan North`).
+
+### [ ] Step 6: Integration & Verification
+- [ ] Run static analysis (linter, formatter) to verify code style and quality (`Continuous Integration - Martin Fowler`).
+- [ ] Run `pnpm build` and `pnpm test` locally to ensure no compilation errors or broken tests exist (`Continuous Integration - Martin Fowler`).
+
