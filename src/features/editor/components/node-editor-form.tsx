@@ -1,4 +1,4 @@
-import { Plus, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import * as React from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useAudioStore } from "@/stores/use-audio-store";
 import type { Transition, WorkflowNode } from "@/workflows/types";
+import { TransitionItemEditor } from "./transition-item-editor";
 
 interface NodeEditorFormProps {
 	node: WorkflowNode | null; // null if creating a new node
@@ -229,92 +230,16 @@ export function NodeEditorForm({
 
 					<div className="flex flex-col gap-3 max-h-60 overflow-y-auto pr-1">
 						{transitions.map((t, index) => (
-							<div
+							<TransitionItemEditor
 								// biome-ignore lint/suspicious/noArrayIndexKey: order can change but keys are stable within item editing
 								key={index}
-								className="flex gap-2 items-center bg-muted/30 p-2.5 rounded-lg border"
-							>
-								<div className="flex-1 flex flex-col gap-2">
-									{/* Target Node Selection */}
-									<div className="flex items-center gap-2">
-										<span className="text-xs text-muted-foreground font-medium w-12 shrink-0">
-											Target:
-										</span>
-										<Select
-											value={t.targetId}
-											onValueChange={(val) =>
-												handleUpdateTransition(index, { targetId: val })
-											}
-										>
-											<SelectTrigger className="flex-1 text-xs font-mono h-8">
-												<SelectValue placeholder="Select target node..." />
-											</SelectTrigger>
-											<SelectContent position="popper">
-												{allNodeIds.map((nodeId) => (
-													<SelectItem
-														key={nodeId}
-														value={nodeId}
-														className="font-mono text-xs"
-													>
-														{nodeId}
-													</SelectItem>
-												))}
-											</SelectContent>
-										</Select>
-									</div>
-
-									{/* Custom details depending on transition type */}
-									{t.type === "choice" && (
-										<div className="flex items-center gap-2">
-											<span className="text-xs text-muted-foreground font-medium w-12 shrink-0">
-												Label:
-											</span>
-											<Input
-												value={t.buttonText}
-												onChange={(e) =>
-													handleUpdateTransition(index, {
-														buttonText: e.target.value,
-													})
-												}
-												placeholder="Choice Button Text Label"
-												className="flex-1 h-8 text-xs"
-											/>
-										</div>
-									)}
-
-									{t.type === "random" && (
-										<div className="flex items-center gap-2">
-											<span className="text-xs text-muted-foreground font-medium w-12 shrink-0">
-												Weight:
-											</span>
-											<Input
-												type="number"
-												value={t.weight}
-												onChange={(e) =>
-													handleUpdateTransition(index, {
-														weight: parseFloat(e.target.value) || 0,
-													})
-												}
-												placeholder="Relative Probability Weight"
-												className="flex-1 h-8 text-xs"
-											/>
-										</div>
-									)}
-								</div>
-
-								{/* Delete transition (only if not direct) */}
-								{transitionType !== "direct" && (
-									<Button
-										type="button"
-										variant="ghost"
-										size="icon"
-										onClick={() => handleRemoveTransition(index)}
-										className="size-8 text-destructive hover:bg-destructive/10"
-									>
-										<Trash2 className="size-4" />
-									</Button>
-								)}
-							</div>
+								transition={t}
+								index={index}
+								allNodeIds={allNodeIds}
+								transitionType={transitionType}
+								onUpdate={handleUpdateTransition}
+								onRemove={handleRemoveTransition}
+							/>
 						))}
 					</div>
 				</div>

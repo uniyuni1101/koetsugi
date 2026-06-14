@@ -10,6 +10,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { useAudioStore } from "@/stores/use-audio-store";
+import { DirectorySummary } from "./directory-summary";
 
 export function FolderLoader() {
 	const setDirectory = useAudioStore((state) => state.setDirectory);
@@ -161,18 +162,10 @@ export function FolderLoader() {
 					</div>
 				)}
 
-				{Object.keys(filesMap).length > 0 && (
-					<div className="mt-2 p-3 bg-muted rounded-lg border text-sm text-muted-foreground">
-						<p className="font-semibold text-foreground">
-							{directoryHandle
-								? `Directory: ${directoryHandle.name}`
-								: "Loaded files in memory"}
-						</p>
-						<p className="text-xs mt-1">
-							Found {Object.keys(filesMap).length} file(s)
-						</p>
-					</div>
-				)}
+				<DirectorySummary
+					directoryName={directoryHandle ? directoryHandle.name : null}
+					filesCount={Object.keys(filesMap).length}
+				/>
 			</CardContent>
 		</Card>
 	);

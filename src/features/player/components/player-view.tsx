@@ -12,6 +12,7 @@ import { AudioPlayer } from "./audio-player";
 import { ChoiceButtons } from "./choice-buttons";
 import { HistoryDrawer } from "./history-drawer";
 import { JumpNodeDrawer } from "./jump-node-drawer";
+import { PlaybackStatusCard } from "./playback-status-card";
 import { PlayerControls } from "./player-controls";
 
 export function PlayerView() {
@@ -93,32 +94,11 @@ export function PlayerView() {
 					{engineState.choices.length > 0 ? (
 						<ChoiceButtons />
 					) : (
-						<div className="flex-1 flex flex-col justify-center items-center gap-4 border-2 border-dashed border-muted rounded-2xl p-6 bg-muted/10 my-4 min-h-0">
-							<div className="relative flex items-center justify-center size-28 rounded-full bg-primary/5 border border-primary/10">
-								{engineState.status === "playing" ? (
-									<>
-										<span className="absolute animate-ping size-16 rounded-full bg-primary/20" />
-										<span className="absolute animate-pulse size-20 rounded-full bg-primary/10" />
-										<Compass className="size-10 text-primary animate-spin [animation-duration:10s]" />
-									</>
-								) : (
-									<Compass className="size-10 text-muted-foreground" />
-								)}
-							</div>
-							<div className="text-center max-w-xs flex flex-col gap-1">
-								<h3 className="font-bold text-lg truncate">
-									{engineState.currentNodeId}
-								</h3>
-								<p className="text-xs text-muted-foreground font-mono truncate px-4">
-									{engineState.currentAudioPath}
-								</p>
-								{engineState.status === "completed" && (
-									<span className="text-xs font-bold text-rose-500 uppercase tracking-widest mt-2">
-										Reached End of Workflow
-									</span>
-								)}
-							</div>
-						</div>
+						<PlaybackStatusCard
+							status={engineState.status}
+							currentNodeId={engineState.currentNodeId}
+							currentAudioPath={engineState.currentAudioPath}
+						/>
 					)}
 
 					{/* Playback Progress Timeline bar */}
