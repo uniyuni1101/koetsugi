@@ -63,12 +63,13 @@ src/
   - XState updates Zustand stores or React actors via event subscriptions. Zustand does not hold domain workflow state; it only keeps track of infrastructure-level metadata like the directory handle.
 
 ## Core Behavioral Principles (Non-negotiable)
-1. **READ FIRST (1500+ lines rule)**: Before modifying a file, read its entire contents (or at least 1500 lines) to fully understand the context. Never do partial reads that lead to code duplication.
-2. **NEVER RE-READ FILES**: Once you have read a file fully within this session, trust the context stored in your history. Do not read it again to save context window tokens.
-3. **DELETE MORE THAN YOU ADD**: Prioritize deleting code over creating new lines. Code complexity compounds into disasters. Keep changes minimal and clean.
-4. **FOLLOW EXISTING PATTERNS**: Do not invent new structures or architectural approaches. Follow the project's existing code style and structure.
-5. **BUILD AND TEST**: Every change must be validated. Run `pnpm build`, `pnpm test`, and `pnpm check` to ensure no compile, test, or linting errors exist.
-6. **COMMIT FREQUENTLY**: Commit your work to Git every 5-10 minutes representing a logical, verifiable step. Please use `/conventional-commit` skill
+1. **READ REQUIRED SKILLS FIRST**: Before starting a task, read the `SKILL.md` of any skill required for the current task. However, never re-read a skill if it has already been read in the current session.
+2. **READ FIRST (1500+ lines rule)**: Before modifying a file, read its entire contents (or at least 1500 lines) to fully understand the context. Never do partial reads that lead to code duplication.
+3. **NEVER RE-READ FILES**: Once you have read a file fully within this session, trust the context stored in your history. Do not read it again to save context window tokens.
+4. **DELETE MORE THAN YOU ADD**: Prioritize deleting code over creating new lines. Code complexity compounds into disasters. Keep changes minimal and clean.
+5. **FOLLOW EXISTING PATTERNS**: Do not invent new structures or architectural approaches. Follow the project's existing code style and structure.
+6. **BUILD AND TEST**: Every change must be validated. Run `pnpm build`, `pnpm test`, and `pnpm check` to ensure no compile, test, or linting errors exist.
+7. **COMMIT FREQUENTLY**: Commit your work to Git every 5-10 minutes representing a logical, verifiable step. Please use `/conventional-commit` skill
 
 ## Task Management
 - **📋 20-POINT TODO LIST**: Always maintain a detailed, progressive todo list of at least 20 items to track your progress and prevent losing context. Keep it updated.
