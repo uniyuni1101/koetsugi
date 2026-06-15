@@ -50,69 +50,75 @@ export function HistoryDrawer() {
 				<div className="flex-1 overflow-y-auto space-y-0.5 pr-1 relative pl-6 scrollbar-thin py-2">
 					<div className="absolute left-3 top-4 bottom-4 w-0.5 bg-muted-foreground/20" />
 
-					{engineState.history.map((nodeId, idx) => {
-						const isCurrent = idx === engineState.history.length - 1;
-						const node = workflow.nodes[nodeId];
-						const audioFileName = node
-							? node.audioPath.split("/").pop() || node.audioPath
-							: "Unknown track";
+					{engineState.history
+						.map((nodeId, idx) => ({
+							key: `${nodeId}-step-${idx}`,
+							nodeId,
+							idx,
+						}))
+						.map(({ key, nodeId, idx }) => {
+							const isCurrent = idx === engineState.history.length - 1;
+							const node = workflow.nodes[nodeId];
+							const audioFileName = node
+								? node.audioPath.split("/").pop() || node.audioPath
+								: "Unknown track";
 
-						return (
-							<div
-								key={`${nodeId}-${idx}`}
-								className="relative flex items-start pb-6 last:pb-2"
-							>
+							return (
 								<div
-									className={`absolute -left-[19px] top-1.5 size-2 rounded-full border-2 ${
-										isCurrent
-											? "bg-primary border-primary animate-pulse shadow-xs"
-											: "bg-background border-muted-foreground/40 hover:border-primary"
-									}`}
-								/>
-
-								<button
-									type="button"
-									disabled={isCurrent}
-									onClick={() => {
-										rollback(idx);
-										setDrawerOpen(false);
-									}}
-									className={`w-full text-left p-3 rounded-xl border flex flex-col gap-1 transition-all ${
-										isCurrent
-											? "bg-primary/5 border-primary/20 ring-1 ring-primary/10 select-none cursor-default"
-											: "bg-card border-border hover:bg-muted/50 cursor-pointer"
-									}`}
+									key={key}
+									className="relative flex items-start pb-6 last:pb-2"
 								>
-									<div className="flex items-center justify-between gap-4">
-										<div className="flex items-center gap-2">
-											<span className="text-xs text-muted-foreground font-mono">
-												#{idx + 1}
-											</span>
-											<span className="font-semibold text-sm truncate">
-												{nodeId}
-											</span>
-											{isCurrent && (
-												<Badge
-													variant="secondary"
-													className="text-[10px] bg-primary/10 text-primary border-primary/20 shrink-0 font-medium py-0 px-1.5 h-4"
-												>
-													Current
-												</Badge>
+									<div
+										className={`absolute -left-[19px] top-1.5 size-2 rounded-full border-2 ${
+											isCurrent
+												? "bg-primary border-primary animate-pulse shadow-xs"
+												: "bg-background border-muted-foreground/40 hover:border-primary"
+										}`}
+									/>
+
+									<button
+										type="button"
+										disabled={isCurrent}
+										onClick={() => {
+											rollback(idx);
+											setDrawerOpen(false);
+										}}
+										className={`w-full text-left p-3 rounded-xl border flex flex-col gap-1 transition-all ${
+											isCurrent
+												? "bg-primary/5 border-primary/20 ring-1 ring-primary/10 select-none cursor-default"
+												: "bg-card border-border hover:bg-muted/50 cursor-pointer"
+										}`}
+									>
+										<div className="flex items-center justify-between gap-4">
+											<div className="flex items-center gap-2">
+												<span className="text-xs text-muted-foreground font-mono">
+													#{idx + 1}
+												</span>
+												<span className="font-semibold text-sm truncate">
+													{nodeId}
+												</span>
+												{isCurrent && (
+													<Badge
+														variant="secondary"
+														className="text-[10px] bg-primary/10 text-primary border-primary/20 shrink-0 font-medium py-0 px-1.5 h-4"
+													>
+														Current
+													</Badge>
+												)}
+											</div>
+											{!isCurrent && (
+												<span className="text-[10px] text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-wider">
+													Rollback →
+												</span>
 											)}
 										</div>
-										{!isCurrent && (
-											<span className="text-[10px] text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-wider">
-												Rollback →
-											</span>
-										)}
-									</div>
-									<span className="text-xs text-muted-foreground truncate font-mono">
-										{audioFileName}
-									</span>
-								</button>
-							</div>
-						);
-					})}
+										<span className="text-xs text-muted-foreground truncate font-mono">
+											{audioFileName}
+										</span>
+									</button>
+								</div>
+							);
+						})}
 				</div>
 
 				<DrawerFooter className="px-0 pt-4 pb-2">

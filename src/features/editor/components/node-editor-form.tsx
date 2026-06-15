@@ -22,6 +22,45 @@ interface NodeEditorFormProps {
 	onCancel: () => void;
 }
 
+const validateForm = (
+	id: string,
+	audioPath: string,
+	transitionType: string,
+	transitions: Transition[],
+): boolean => {
+	if (!id.trim()) {
+		toast.error("Node ID is required.");
+		return false;
+	}
+
+	if (!audioPath) {
+		toast.error("Please select an audio path.");
+		return false;
+	}
+
+	if (transitionType !== "none" && transitions.length === 0) {
+		toast.error("Please add at least one transition target.");
+		return false;
+	}
+
+	for (const t of transitions) {
+		if (!t.targetId) {
+			toast.error("All transitions must have a target node selected.");
+			return false;
+		}
+		if (t.type === "choice" && !t.buttonText.trim()) {
+			toast.error("All choice transitions require a button text label.");
+			return false;
+		}
+		if (t.type === "random" && (Number.isNaN(t.weight) || t.weight <= 0)) {
+			toast.error("Random weights must be positive numbers.");
+			return false;
+		}
+	}
+
+	return true;
+};
+
 export function NodeEditorForm({
 	node,
 	onSave,
@@ -54,23 +93,26 @@ export function NodeEditorForm({
 
 	// Handle type changes
 	React.useEffect(() => {
+		const firstNodeId = allNodeIds[0] || "";
 		if (transitionType === "none") {
 			setTransitions([]);
 		} else if (transitionType === "direct") {
-			setTransitions([{ type: "direct", targetId: allNodeIds[0] || "" }]);
-		} else if (
-			transitions.length === 0 ||
-			transitions[0]?.type !== transitionType
-		) {
-			// Initialize with single item
-			const base = { targetId: allNodeIds[0] || "" };
-			if (transitionType === "choice") {
-				setTransitions([{ type: "choice", ...base, buttonText: "Option 1" }]);
-			} else if (transitionType === "random") {
-				setTransitions([{ type: "random", ...base, weight: 1 }]);
-			}
+			setTransitions([{ type: "direct", targetId: firstNodeId }]);
+		} else {
+			setTransitions((prev) => {
+				if (prev.length === 0 || prev[0]?.type !== transitionType) {
+					const base = { targetId: firstNodeId };
+					if (transitionType === "choice") {
+						return [{ type: "choice", ...base, buttonText: "Option 1" }];
+					}
+					if (transitionType === "random") {
+						return [{ type: "random", ...base, weight: 1 }];
+					}
+				}
+				return prev;
+			});
 		}
-	}, [transitionType]);
+	}, [transitionType, allNodeIds[0]]);
 
 	const handleAddTransition = () => {
 		const base = { targetId: allNodeIds[0] || "" };
@@ -109,35 +151,8 @@ export function NodeEditorForm({
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 
-		if (!id.trim()) {
-			toast.error("Node ID is required.");
+		if (!validateForm(id, audioPath, transitionType, transitions)) {
 			return;
-		}
-
-		if (!audioPath) {
-			toast.error("Please select an audio path.");
-			return;
-		}
-
-		if (transitionType !== "none" && transitions.length === 0) {
-			toast.error("Please add at least one transition target.");
-			return;
-		}
-
-		// Validation of weight/targets
-		for (const t of transitions) {
-			if (!t.targetId) {
-				toast.error("All transitions must have a target node selected.");
-				return;
-			}
-			if (t.type === "choice" && !t.buttonText.trim()) {
-				toast.error("All choice transitions require a button text label.");
-				return;
-			}
-			if (t.type === "random" && (Number.isNaN(t.weight) || t.weight <= 0)) {
-				toast.error("Random weights must be positive numbers.");
-				return;
-			}
 		}
 
 		const updatedNode: WorkflowNode = {
@@ -228,17 +243,23 @@ export function NodeEditorForm({
 					<Separator />
 
 					<div className="flex flex-col gap-3 max-h-60 overflow-y-auto pr-1">
-						{transitions.map((t, index) => (
-							<TransitionItemEditor
-								key={index}
-								transition={t}
-								index={index}
-								allNodeIds={allNodeIds}
-								transitionType={transitionType}
-								onUpdate={handleUpdateTransition}
-								onRemove={handleRemoveTransition}
-							/>
-						))}
+						{transitions
+							.map((t, index) => ({
+								t,
+								index,
+								key: `${t.type}-${t.targetId}-${index}`,
+							}))
+							.map(({ t, index, key }) => (
+								<TransitionItemEditor
+									key={key}
+									transition={t}
+									index={index}
+									allNodeIds={allNodeIds}
+									transitionType={transitionType}
+									onUpdate={handleUpdateTransition}
+									onRemove={handleRemoveTransition}
+								/>
+							))}
 					</div>
 				</div>
 			)}

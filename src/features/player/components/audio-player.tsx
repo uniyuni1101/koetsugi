@@ -13,15 +13,16 @@ export function AudioPlayer() {
 	const [objectUrl, setObjectUrl] = React.useState<string | null>(null);
 
 	// Load audio file when currentAudioPath changes
+	const currentAudioPath = engineState?.currentAudioPath;
 	React.useEffect(() => {
-		if (!engineState || !engineState.currentAudioPath) {
+		if (!currentAudioPath) {
 			setObjectUrl(null);
 			return;
 		}
 
-		const audioFile = filesMap[engineState.currentAudioPath];
+		const audioFile = filesMap[currentAudioPath];
 		if (!audioFile) {
-			console.error(`Audio file not found: ${engineState.currentAudioPath}`);
+			console.error(`Audio file not found: ${currentAudioPath}`);
 			return;
 		}
 
@@ -31,7 +32,7 @@ export function AudioPlayer() {
 		return () => {
 			URL.revokeObjectURL(url);
 		};
-	}, [engineState?.currentAudioPath, filesMap]);
+	}, [currentAudioPath, filesMap]);
 
 	// Play/Pause control based on engineState status and objectUrl
 	React.useEffect(() => {
@@ -79,6 +80,8 @@ export function AudioPlayer() {
 			onTimeUpdate={handleTimeUpdate}
 			onEnded={handleEnded}
 			className="hidden"
-		/>
+		>
+			<track kind="captions" />
+		</audio>
 	);
 }
